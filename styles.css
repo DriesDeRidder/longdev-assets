@@ -36,7 +36,8 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; overflow-x: clip; }
-section[id] { scroll-margin-top: 76px; } /* clear the sticky header when jumping to a section */
+/* Clear the sticky header (68px) with room to spare when jumping to a section or the skip target. */
+section[id], main[id] { scroll-margin-top: 96px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -77,7 +78,7 @@ a:focus-visible, button:focus-visible {
 .skip:focus { left: 8px; z-index: 30; }
 
 /* shared glass surface */
-.glass, .now, .panel, .top nav, .filters {
+.glass, .demo, .panel, .top nav, .filters {
   background: var(--glass);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
@@ -89,6 +90,11 @@ a:focus-visible, button:focus-visible {
 .top {
   position: sticky; top: 0; z-index: 20;
   padding: 12px 0;
+  /* a frosted strip behind the pills, so headings scroll under the bar instead of colliding with the wordmark */
+  background: rgba(22, 22, 22, .72);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border-bottom: 1px solid var(--line);
 }
 .top-inner {
   max-width: var(--max);
@@ -131,14 +137,14 @@ a:focus-visible, button:focus-visible {
   margin: 0 auto;
   padding: clamp(40px, 8vw, 104px) var(--gutter) clamp(56px, 9vw, 120px);
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 72px);
-  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); /* the demo gets the larger share */
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
 }
 .hero h1 {
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(3.2rem, 6.4vw, 5.8rem);
+  font-size: clamp(3.2rem, 5.6vw, 5.2rem);
   line-height: .9;
   font-weight: 900;
   letter-spacing: -.01em;
@@ -177,21 +183,32 @@ a:focus-visible, button:focus-visible {
 .btn:active { transform: scale(.97); }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:active { transform: none; } }
 
-/* "On the bench" panel */
-.now { margin: 0; border-radius: 20px; overflow: hidden; }
-.now figcaption {
-  padding: 14px 22px;
-  border-bottom: var(--rule);
-  font-family: var(--mono);
-  font-size: .85rem;
-  color: var(--muted);
+.btn.small { min-height: 44px; padding: 0 18px; font-size: .95rem; }
+
+/* one-line development status under the hero buttons */
+.hero-status {
+  margin: 22px 0 0;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  color: var(--muted); font-size: .95rem;
 }
-.bars { list-style: none; margin: 0; padding: 20px 22px 24px; display: grid; gap: 20px; }
-.bars li { display: grid; gap: 8px; }
-.bars .row { display: flex; justify-content: space-between; gap: 12px; font-size: .95rem; }
-.bars .row span:first-child { font-weight: 600; }
-.bars .row span:last-child { color: var(--muted); white-space: nowrap; font-family: var(--mono); font-size: .85rem; }
-.bars li:nth-child(n+2) { padding-left: 24px; } /* parent + indented children, like the brand mark */
+.hero-status:empty { display: none; }
+.hero-status a { color: var(--text); text-underline-offset: 4px; }
+.hero-status a:hover { color: var(--orange-head); }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(255, 157, 60, .18); }
+
+/* product demo in the hero */
+.demo { margin: 0; border-radius: 20px; overflow: hidden; align-self: center; }
+.demo video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #0a0a0a; }
+.demo figcaption {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px;
+  padding: 14px 20px;
+  border-top: var(--rule);
+  color: var(--muted);
+  font-size: .92rem;
+}
+.demo figcaption strong { color: var(--text); }
+.demo figcaption a { color: var(--orange); font-weight: 700; white-space: nowrap; text-underline-offset: 4px; }
+.demo figcaption a:hover { color: var(--orange-head); }
 
 /* continuous bar, placeholder art only */
 .track {
@@ -236,13 +253,6 @@ a:focus-visible, button:focus-visible {
 .seg.done i { background: var(--text); box-shadow: none; }
 .seg.done i::after { display: none; }
 
-@media (prefers-reduced-motion: no-preference) {
-  /* the one orchestrated moment: hero segments light up in order */
-  .now .seg i.on { animation: seg-on .3s ease-out backwards; animation-delay: calc(var(--i) * 140ms + .2s); }
-  .now li:nth-child(2) .seg i.on { animation-delay: calc(var(--i) * 140ms + .35s); }
-  .now li:nth-child(3) .seg i.on { animation-delay: calc(var(--i) * 140ms + .5s); }
-  @keyframes seg-on { from { background: var(--track); box-shadow: inset 0 0 0 1px var(--seg-edge); } }
-}
 
 /* ---------- section blocks ---------- */
 .block {
@@ -333,13 +343,29 @@ a:focus-visible, button:focus-visible {
 .shot.blank .track:nth-child(n+2) { margin-left: 14%; }
 
 .asset-body { padding: 20px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+/* "Available now" and "Coming soon" */
+.group + .group { margin-top: clamp(48px, 6vw, 72px); }
+.group[hidden] { display: none; }
+.group-title {
+  margin: 0 0 20px;
+  font-family: var(--mono);
+  font-size: .9rem; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--orange);
+}
+.group-note { margin: -12px 0 20px; color: var(--muted); }
+#group-soon .group-title { color: var(--muted); }
+#group-soon .asset { background: rgba(24, 24, 24, .5); }
+#group-soon .asset::before { opacity: .22; }
+
 .asset h3 {
   margin: 0;
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -.01em;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  line-height: 1.25;
 }
+.asset .status { align-self: flex-start; margin-top: 8px; }
 .status {
   font-family: var(--mono);
   font-size: .75rem; font-weight: 500; letter-spacing: 0;
@@ -370,24 +396,15 @@ a:focus-visible, button:focus-visible {
 .asset:has(.card-link:focus-visible) { outline: 3px solid var(--orange); outline-offset: 3px; }
 .asset { transition: transform .18s ease, border-color .18s ease; }
 .asset:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, .24); }
-.asset:hover .more { color: var(--text); }
 @media (prefers-reduced-motion: reduce) { .asset { transition: none; } .asset:hover { transform: none; } }
 
-.card-foot {
+/* actions sit on the card's bottom edge, whatever the text above them */
+.card-actions {
   margin-top: auto;
-  padding-top: 18px;
-  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px;
+  padding-top: 20px;
+  display: flex; flex-wrap: wrap; gap: 10px;
 }
-.more { color: var(--muted); font-weight: 600; font-size: .95rem; transition: color .15s; }
-.asset .go {
-  position: relative; z-index: 2; /* above the card link */
-  color: var(--orange);
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 5px;
-}
-.asset .go:hover { color: var(--orange-head); }
+.card-actions .btn { position: relative; z-index: 2; } /* above the card link */
 
 /* ---------- roadmap: one glass panel ---------- */
 .panel { border-radius: 20px; }
@@ -526,12 +543,11 @@ a:focus-visible, button:focus-visible {
 @media (max-width: 520px) {
   .wordmark { font-size: 1.05rem; padding: 0 14px; }
   .top nav a { padding: 0 10px; font-size: .95rem; }
-  .bars { padding: 16px; }
 }
 
 /* Reduce Transparency: glass becomes solid */
 @media (prefers-reduced-transparency: reduce) {
-  .glass, .now, .panel, .top nav, .filters, .btn:not(.primary), .asset {
+  .glass, .demo, .panel, .top nav, .filters, .btn:not(.primary), .asset, .top {
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;

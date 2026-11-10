@@ -2,6 +2,8 @@
 //
 // asset.status: "live" | "review" | "building"
 // asset.category: "tools" | "vr" | "art" | "free"   (filter buttons only appear for categories in use)
+// asset.pitch: the one-line benefit on the homepage card (the summary is used on the asset's page).
+// asset.facts: compatibility only (version, Unity, pipelines, platforms), shown as chips under the pitch.
 // asset.image: defaults to img/<slug>.jpg; set false to show the bar placeholder (no request).
 // asset.url: Asset Store (or GitHub) page. Leave "" until the page exists; the card then shows no link.
 // asset.detail: the asset's page (asset.html?a=<slug>). tagline (optional, else summary), solves and why (paragraphs),
@@ -24,13 +26,14 @@ window.SITE = {
   about: [
     "I'm a Unity and VR developer from Belgium. My day job is building VR experiences and getting heavy production data, from BIM models to laser scans, running smoothly in Unity.",
     "That work keeps turning up the same chores: re-baking twenty scenes by hand, dragging one material onto fifty renderers, staring at a frozen progress bar. LongDev is where I turn those chores into tools that other developers can buy.",
-    "Every tool follows the same rules. It is editor-only unless it has to ship. It works on Built-in, URP and HDRP. It has no native plugins, comes with a real manual and tests, and leaves your project the way it found it.",
+    "Every tool follows the same rules: it stays out of your build unless it has to ship, uses no native plugins, comes with a manual, and leaves your project the way it found it. Supported Unity versions and render pipelines differ per tool, so each card lists its own.",
   ],
 
   assets: [
     {
       name: "Batch Lightmap Baker",
       slug: "batch-lightmap-baker",
+      pitch: "Bake lightmaps for every scene in one unattended run.",
       category: "tools",
       status: "live",
       summary:
@@ -57,6 +60,7 @@ window.SITE = {
     {
       name: "MatSwap",
       slug: "matswap",
+      pitch: "Put one material on a whole selection with a single click.",
       category: "tools",
       status: "live",
       summary:
@@ -82,6 +86,7 @@ window.SITE = {
     {
       name: "Scatterbrush",
       slug: "scatterbrush",
+      pitch: "Paint prefabs on any mesh, with zones they stay out of.",
       category: "tools",
       status: "review",
       summary:
@@ -108,6 +113,7 @@ window.SITE = {
     {
       name: "Ultimate Editor Progress Bar",
       slug: "progress-bar",
+      pitch: "A progress bar that keeps moving while Unity is busy.",
       category: "tools",
       status: "review",
       summary:
@@ -132,6 +138,7 @@ window.SITE = {
     {
       name: "VR Command Console",
       slug: "vr-command-console",
+      pitch: "A radial debug menu you use without taking the headset off.",
       category: "vr",
       status: "review",
       summary:
@@ -158,10 +165,11 @@ window.SITE = {
     {
       name: "Nubis",
       slug: "nubis",
+      pitch: "Stream laser scans of any size under a fixed memory budget.",
       category: "tools",
       status: "building",
       summary:
-        "Convert LAS, LAZ, E57, PLY and PCD scans of any size inside Unity, then stream them under a fixed memory budget. 126 million points at 154 fps.",
+        "Convert LAS, LAZ, E57, PLY and PCD scans of any size inside Unity, then stream them under a fixed memory budget. 126 million points at over 100 fps on a laptop.",
       facts: ["Unity 6.3+", "URP, HDRP"],
       url: "",
       detail: {

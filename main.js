@@ -51,17 +51,25 @@
   $("intro").textContent = S.intro;
 
   const heroLinks = $("hero-links");
-  if (S.links.store) heroLinks.append(el("a", { className: "btn primary", href: S.links.store, textContent: "Visit the Asset Store page" }));
-  heroLinks.append(el("a", { className: "btn" + (S.links.store ? "" : " primary"), href: "#assets", textContent: "Browse the assets" }));
-  heroLinks.append(el("a", { className: "btn", href: "#roadmap", textContent: "See what's next" }));
+  heroLinks.append(el("a", { className: "btn primary", href: "#assets", textContent: "Browse the assets" }));
+  if (S.links.store) heroLinks.append(el("a", { className: "btn", href: S.links.store, target: "_blank", rel: "noopener", textContent: "Unity Asset Store \u2197" }));
 
-  for (const item of S.roadmap.slice(0, 3)) {
-    $("now-bars").append(
-      el("li", {}, [
-        el("div", { className: "row" }, [el("span", { textContent: item.name }), hiddenText(S.stages[item.stage])]),
-        stageBar(item.stage),
-      ])
+  // Development status is a one-line link here; the full roadmap lives further down.
+  const now = S.roadmap[0];
+  if (now) {
+    $("hero-status").append(
+      el("span", { className: "pulse" }),
+      el("span", { textContent: `Now building: ${now.name}` }),
+      el("a", { href: "#roadmap", textContent: "See the roadmap" })
     );
+  }
+
+  // The demo loops on its own, except for visitors who asked for less motion: they get the poster and the controls.
+  const video = $("demo-video");
+  if (video && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    video.removeAttribute("autoplay");
+    video.pause();
+    video.controls = true;
   }
 
   // ---------- assets ----------
@@ -70,8 +78,10 @@
     shot.replaceChildren(line(62), line(100, true), line(28));
   };
 
-  const grid = $("asset-grid");
+  // Released assets first, so visitors see what they can use today; the rest sit under "Coming soon".
+  const grids = { live: $("grid-live"), soon: $("grid-soon") };
   for (const a of S.assets) {
+    const released = a.status === "live";
     const shot = el("div", { className: "shot" });
     if (a.image === false) {
       placeholder(shot);
@@ -84,37 +94,52 @@
       shot.append(img);
     }
 
-    // The name is the card's link to its detail page; its ::after covers the whole card (styles.css),
-    // and the store link sits above that overlay so it stays its own target.
-    const more = el("span", { className: "more", textContent: "More about it \u2192" });
-    more.setAttribute("aria-hidden", "true");
+    // Every card reads the same way: title, status, one-line benefit, compatibility, actions on the bottom edge.
+    // The name's link also stretches over the whole card (styles.css); the buttons sit above that overlay.
+    const page = `asset.html?a=${encodeURIComponent(a.slug)}`;
+    const actions = el("div", { className: "card-actions" }, [
+      el("a", { className: "btn small" + (released ? " primary" : ""), href: page, textContent: released ? "View asset" : "Preview" }),
+    ]);
+    if (a.url) {
+      actions.append(
+        el("a", {
+          className: "btn small",
+          href: a.url,
+          target: "_blank",
+          rel: "noopener",
+          textContent: a.url.includes("github.com") ? "GitHub \u2197" : "Unity Asset Store \u2197",
+        })
+      );
+    } else if (!released && S.links.email) {
+      actions.append(
+        el("a", {
+          className: "btn small",
+          href: `mailto:${S.links.email}?subject=${encodeURIComponent(`Notify me: ${a.name}`)}&body=${encodeURIComponent(`Please email me when ${a.name} is on the Asset Store.`)}`,
+          textContent: "Notify me",
+        })
+      );
+    }
+    for (const b of actions.children) b.setAttribute("aria-label", `${b.textContent.replace(" \u2197", "")}: ${a.name}`);
+
     const card = el("li", { className: "asset" }, [
       shot,
       el("div", { className: "asset-body" }, [
-      el("h3", {}, [
-        el("a", { className: "card-link", href: `asset.html?a=${encodeURIComponent(a.slug)}`, textContent: a.name }),
+        el("h3", {}, el("a", { className: "card-link", href: page, textContent: a.name })),
         el("span", { className: `status ${a.category === "free" ? "free" : a.status}`, textContent: a.category === "free" ? "Free" : STATUS[a.status] }),
-      ]),
-      el("p", { textContent: a.summary }),
-      el("ul", { className: "facts" }, a.facts.map((f) => el("li", { textContent: f }))),
-      el("div", { className: "card-foot" }, [
-        more,
-        a.url
-          ? el("a", {
-              className: "go",
-              href: a.url,
-              target: "_blank",
-              rel: "noopener",
-              textContent: a.url.includes("github.com") ? "View on GitHub" : "View on the Asset Store",
-            })
-          : null,
-      ]),
+        el("p", { textContent: a.pitch || a.summary }),
+        el("ul", { className: "facts", ariaLabel: "Compatibility" }, a.facts.map((f) => el("li", { textContent: f }))),
+        actions,
       ]),
     ]);
     card.dataset.category = a.category;
     if (a.image !== false) card.style.setProperty("--art", `url("${a.image || `img/${a.slug}.jpg`}")`);
-    grid.append(card);
+    grids[released ? "live" : "soon"].append(card);
   }
+  // A group with nothing in it (nothing released yet, or filtered away) disappears with its heading.
+  const syncGroups = () => {
+    for (const key of ["live", "soon"]) $(`group-${key}`).hidden = ![...grids[key].children].some((c) => !c.hidden);
+  };
+  syncGroups();
 
   const filters = $("filters");
   const used = new Set(S.assets.map((a) => a.category));
@@ -124,7 +149,8 @@
     b.setAttribute("aria-pressed", key === "all");
     b.addEventListener("click", () => {
       for (const x of filters.children) x.setAttribute("aria-pressed", x === b);
-      for (const c of grid.children) c.hidden = key !== "all" && c.dataset.category !== key;
+      for (const g of Object.values(grids)) for (const c of g.children) c.hidden = key !== "all" && c.dataset.category !== key;
+      syncGroups();
     });
     filters.append(b);
   }
