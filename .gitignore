@@ -1,0 +1,9 @@
+# Local Claude Code skills, not part of the site
+.agents/
+.claude/
+skills-lock.json
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.vscode/
