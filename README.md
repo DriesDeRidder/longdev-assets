@@ -20,6 +20,6 @@ Open `index.html` in a browser, or `python -m http.server` in this folder.
 ## Deploy
 
 Hosted with GitHub Pages from the `main` branch, root folder (`.nojekyll` skips the Jekyll build).
-Push to `main` and the site updates within a minute or two at https://driesderidder.github.io/LongDevSite/.
+Push to `main` and the site updates within a minute or two at https://driesderidder.com/LongDevSite/ (your user site's custom domain applies to project sites too).
 
 The local Claude Code skill folders (`.agents/`, `.claude/`) are git-ignored so they are never published.
