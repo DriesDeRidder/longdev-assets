@@ -8,7 +8,7 @@
     return n;
   };
 
-  const STATUS = { live: "On the store", soon: "Coming soon", building: "In progress" };
+  const STATUS = { live: "On the store", review: "In review", soon: "Coming soon", building: "In progress" };
   const FILTERS = [
     ["all", "All"],
     ["tools", "Editor tools"],

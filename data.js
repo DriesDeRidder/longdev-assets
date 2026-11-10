@@ -1,17 +1,17 @@
 // All site content lives here. Edit this file to add an asset, change a status or move a roadmap item.
 //
-// asset.status: "live" | "soon" | "building"
-// asset.category: "tools" | "vr" | "art" | "free"
+// asset.status: "live" | "review" | "building"
+// asset.category: "tools" | "vr" | "art" | "free"   (filter buttons only appear for categories in use)
 // asset.image: defaults to img/<slug>.jpg; set false to show the bar placeholder (no request).
 // asset.url: Asset Store (or GitHub) page. Leave "" until the page exists; the card then shows no link.
-// roadmap.stage: index into STAGES below (0 = Planned ... 4 = Live)
+// roadmap.stage: index into stages below (0 = Planned ... 4 = Live)
 
 window.SITE = {
   name: "Dries De Ridder",
   brand: "LongDev",
   tagline: "Unity tools for the slow, repetitive parts of the job.",
   intro:
-    "I build editor tools, VR utilities and environment art for Unity and sell them on the Asset Store as LongDev. Most of them started as something I needed on a real project.",
+    "I build editor tools and VR utilities for Unity and sell them on the Asset Store as LongDev. Most of them started as something I needed on a real project.",
 
   links: {
     store: "", // TODO: your Asset Store publisher page, e.g. https://assetstore.unity.com/publishers/12345
@@ -34,34 +34,24 @@ window.SITE = {
       status: "live",
       summary:
         "Bake lightmaps for every scene in one unattended run. Pre-flight checks, changed-only rebakes, webhooks when it finishes, and headless CI baking.",
-      facts: ["Unity 6+", "Built-in, URP, HDRP"],
-      url: "",
-    },
-    {
-      name: "VR Command Console",
-      slug: "vr-command-console",
-      category: "vr",
-      status: "live",
-      summary:
-        "A radial debug menu for VR prototypes. Mark a method with [ConsoleCommand] and point, poke or shoot at it in the headset.",
-      facts: ["Unity 2022.3+", "OpenXR, XRI 3"],
-      url: "",
+      facts: ["v1.3", "Unity 6+", "Built-in, URP, HDRP"],
+      url: "", // TODO: Asset Store page
     },
     {
       name: "MatSwap",
       slug: "matswap",
       category: "tools",
-      status: "soon",
+      status: "live",
       summary:
         "Assign and swap materials in place. Arm the slots you want to change, click a material in the palette, and it lands on the whole selection.",
       facts: ["Unity 2022.3+", "Any pipeline"],
-      url: "",
+      url: "", // TODO: Asset Store page
     },
     {
       name: "Scatterbrush",
       slug: "scatterbrush",
       category: "tools",
-      status: "soon",
+      status: "review",
       summary:
         "Paint and scatter prefabs on any mesh, not just Terrain. Exclusion zones filter by layer, so trees stay off the path while grass still grows on it.",
       facts: ["Unity 2022.3+", "Built-in, URP, HDRP"],
@@ -71,10 +61,20 @@ window.SITE = {
       name: "Ultimate Editor Progress Bar",
       slug: "progress-bar",
       category: "tools",
-      status: "soon",
+      status: "review",
       summary:
         "A progress window that keeps moving while Unity's main thread is frozen. Stacked tasks, ETA, cancel and taskbar progress, as a one-line swap for DisplayProgressBar.",
       facts: ["Unity 2022.3+", "Windows editor"],
+      url: "",
+    },
+    {
+      name: "VR Command Console",
+      slug: "vr-command-console",
+      category: "vr",
+      status: "review",
+      summary:
+        "A radial debug menu for VR prototypes. Mark a method with [ConsoleCommand] and point, poke or shoot at it in the headset.",
+      facts: ["Unity 2022.3+", "OpenXR, XRI 3"],
       url: "",
     },
     {
@@ -85,28 +85,6 @@ window.SITE = {
       summary:
         "Convert LAS, LAZ, E57, PLY and PCD scans of any size inside Unity, then stream them under a fixed memory budget. 126 million points at 154 fps.",
       facts: ["Unity 6.3+", "URP, HDRP"],
-      url: "",
-    },
-    {
-      name: "Nordic Cozy",
-      slug: "nordic-cozy",
-      image: false, // TODO: add img/nordic-cozy.jpg and remove this line
-      category: "art",
-      status: "building",
-      summary:
-        "A stylized Scandinavian environment pack: a modular building kit on a 2 m grid, falu-red cottages, and one slider that turns every asset from summer to winter.",
-      facts: ["Unity 2022.3+", "URP, Quest-tested"],
-      url: "",
-    },
-    {
-      name: "Batch Prefab Processor",
-      slug: "batch-prefab-processor",
-      image: false, // TODO: add img/batch-prefab-processor.jpg and remove this line
-      category: "tools",
-      status: "building",
-      summary:
-        "Bulk-edit hundreds of prefabs safely. Every run is a dry run first, every write is backed up, and every change ends up in a report you can export.",
-      facts: ["Editor tool"],
       url: "",
     },
     {
@@ -124,7 +102,7 @@ window.SITE = {
 
   stages: ["Planned", "Building", "Testing", "Store review", "Live"],
 
-  // Ordered: what I'm working on first.
+  // Ordered: what I'm working on first. The first three also appear at the top of the page.
   roadmap: [
     {
       name: "Nubis 1.0",
@@ -132,19 +110,19 @@ window.SITE = {
       note: "Waiting on a Meta Quest on-device run and a macOS player check before launch.",
     },
     {
-      name: "Nordic Cozy",
-      stage: 1,
-      note: "Around 200 assets in production, plus the summer-to-winter season slider.",
-    },
-    {
-      name: "Batch Prefab Processor",
-      stage: 1,
-      note: "Dry run, backups and reports are in place. Operations come next.",
+      name: "Scatterbrush",
+      stage: 3,
+      note: "Submitted to the Asset Store and being validated by Unity.",
     },
     {
       name: "Ultimate Editor Progress Bar",
       stage: 3,
-      note: "Rebuilt as an in-editor window so it meets Asset Store rules. Version 0.2.0 is ready.",
+      note: "Rebuilt as an in-editor window so it meets Asset Store rules. Being validated by Unity.",
+    },
+    {
+      name: "VR Command Console",
+      stage: 3,
+      note: "Submitted to the Asset Store and in review.",
     },
     {
       name: "Nubis 1.1: scan positions",
@@ -152,7 +130,7 @@ window.SITE = {
       note: "Keep each E57 scanner position after conversion, and jump the camera between them.",
     },
     {
-      name: "VR Command Console 1.2",
+      name: "VR Command Console: plain objects",
       stage: 0,
       note: "Register plain C# objects and ScriptableObjects, so services can expose commands too.",
     },
