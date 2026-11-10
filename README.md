@@ -20,6 +20,10 @@ Open `index.html` in a browser, or `python -m http.server` in this folder.
 ## Deploy
 
 Hosted with GitHub Pages from the `main` branch, root folder (`.nojekyll` skips the Jekyll build).
-Push to `main` and the site updates within a minute or two at https://driesderidder.com/LongDevSite/ (your user site's custom domain applies to project sites too).
+Live at https://longdev-assets.com/ (the `CNAME` file sets the custom domain; don't delete it).
+Push to `main` and the site updates within a minute or two.
+
+DNS for longdev-assets.com: `A` records to 185.199.108.153 / .109 / .110 / .111.153, matching `AAAA` records
+2606:50c0:8000::153 to 8003::153, and `www` as a `CNAME` to `driesderidder.github.io`.
 
 The local Claude Code skill folders (`.agents/`, `.claude/`) are git-ignored so they are never published.
