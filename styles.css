@@ -363,10 +363,24 @@ a:focus-visible, button:focus-visible {
   border: 1px solid rgba(255, 255, 255, .06);
   color: #d4d4d4;
 }
-.asset .go {
+/* the whole card opens the detail page: the name's link stretches over it */
+.card-link { color: inherit; text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.card-link:focus-visible { outline: none; }
+.asset:has(.card-link:focus-visible) { outline: 3px solid var(--orange); outline-offset: 3px; }
+.asset { transition: transform .18s ease, border-color .18s ease; }
+.asset:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, .24); }
+.asset:hover .more { color: var(--text); }
+@media (prefers-reduced-motion: reduce) { .asset { transition: none; } .asset:hover { transform: none; } }
+
+.card-foot {
   margin-top: auto;
   padding-top: 18px;
-  align-self: flex-start;
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px;
+}
+.more { color: var(--muted); font-weight: 600; font-size: .95rem; transition: color .15s; }
+.asset .go {
+  position: relative; z-index: 2; /* above the card link */
   color: var(--orange);
   font-weight: 700;
   text-decoration: underline;
@@ -425,11 +439,82 @@ a:focus-visible, button:focus-visible {
 .foot-links a { text-decoration: underline; text-underline-offset: 4px; }
 .foot-links a:hover { color: var(--text); }
 
+/* ---------- asset detail page ---------- */
+.detail .block { padding-top: clamp(28px, 4vw, 48px); padding-bottom: clamp(28px, 4vw, 48px); }
+.detail-head { padding-top: clamp(24px, 4vw, 48px); }
+.back {
+  display: inline-flex; align-items: center; min-height: 44px;
+  color: var(--muted); font-weight: 600; text-decoration: none;
+}
+.back:hover { color: var(--text); }
+.detail-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+.detail-shot { margin: 0; border-radius: 20px; box-shadow: var(--glass-shadow); }
+.detail-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(3rem, 6vw, 5.2rem);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -.005em;
+  overflow-wrap: anywhere;
+}
+.detail-intro .status { display: inline-block; margin-top: 16px; }
+.lede { margin: 18px 0 0; color: #cfcfcf; font-size: 1.2rem; max-width: 46ch; }
+.detail-intro .hero-links { margin-top: 28px; }
+
+.story { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(16px, 2vw, 24px); }
+.story-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px clamp(18px, 3vw, 40px);
+  padding: clamp(22px, 3vw, 36px);
+}
+.story-num {
+  font-family: var(--mono);
+  color: var(--orange);
+  font-size: .95rem;
+  padding-top: .55em;
+}
+.story-item h2 {
+  margin: 0 0 12px;
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1;
+}
+.story-item p { margin: 0 0 1em; max-width: var(--measure); color: #cfcfcf; }
+.story-item p:last-child { margin-bottom: 0; }
+.proof { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: var(--measure); }
+.proof li { position: relative; padding-left: 26px; color: #cfcfcf; }
+.proof li::before {
+  content: ""; position: absolute; left: 2px; top: .55em;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: linear-gradient(to bottom, #ffb062, var(--orange));
+}
+
+.feature-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+}
+.feature-list li { padding: 16px 20px; border-radius: 16px; color: #d8d8d8; font-size: 1rem; }
+.others { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+
 /* ---------- small screens ---------- */
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; align-items: start; }
   .about { grid-template-columns: 1fr; gap: 20px; }
   .about-body { border-left: 0; padding-left: 0; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .story-item { grid-template-columns: 1fr; }
+  .story-num { padding-top: 0; }
   .stage-scale { display: none; }
   .roadmap-panel { padding-top: 4px; }
   .roadmap li { grid-template-columns: 1fr; }

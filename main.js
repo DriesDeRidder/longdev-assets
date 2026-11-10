@@ -84,21 +84,31 @@
       shot.append(img);
     }
 
+    // The name is the card's link to its detail page; its ::after covers the whole card (styles.css),
+    // and the store link sits above that overlay so it stays its own target.
+    const more = el("span", { className: "more", textContent: "More about it \u2192" });
+    more.setAttribute("aria-hidden", "true");
     const card = el("li", { className: "asset" }, [
       shot,
       el("div", { className: "asset-body" }, [
-      el("h3", {}, [a.name, el("span", { className: `status ${a.category === "free" ? "free" : a.status}`, textContent: a.category === "free" ? "Free" : STATUS[a.status] })]),
+      el("h3", {}, [
+        el("a", { className: "card-link", href: `asset.html?a=${encodeURIComponent(a.slug)}`, textContent: a.name }),
+        el("span", { className: `status ${a.category === "free" ? "free" : a.status}`, textContent: a.category === "free" ? "Free" : STATUS[a.status] }),
+      ]),
       el("p", { textContent: a.summary }),
       el("ul", { className: "facts" }, a.facts.map((f) => el("li", { textContent: f }))),
-      a.url
-        ? el("a", {
-            className: "go",
-            href: a.url,
-            target: "_blank",
-            rel: "noopener",
-            textContent: a.url.includes("github.com") ? "View on GitHub" : "View on the Asset Store",
-          })
-        : null,
+      el("div", { className: "card-foot" }, [
+        more,
+        a.url
+          ? el("a", {
+              className: "go",
+              href: a.url,
+              target: "_blank",
+              rel: "noopener",
+              textContent: a.url.includes("github.com") ? "View on GitHub" : "View on the Asset Store",
+            })
+          : null,
+      ]),
       ]),
     ]);
     card.dataset.category = a.category;
