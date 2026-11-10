@@ -86,6 +86,7 @@
 
     const card = el("li", { className: "asset" }, [
       shot,
+      el("div", { className: "asset-body" }, [
       el("h3", {}, [a.name, el("span", { className: `status ${a.category === "free" ? "free" : a.status}`, textContent: a.category === "free" ? "Free" : STATUS[a.status] })]),
       el("p", { textContent: a.summary }),
       el("ul", { className: "facts" }, a.facts.map((f) => el("li", { textContent: f }))),
@@ -98,6 +99,7 @@
             textContent: a.url.includes("github.com") ? "View on GitHub" : "View on the Asset Store",
           })
         : null,
+      ]),
     ]);
     card.dataset.category = a.category;
     grid.append(card);
