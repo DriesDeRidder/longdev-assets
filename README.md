@@ -24,6 +24,6 @@ Live at https://longdev-assets.com/ (the `CNAME` file sets the custom domain; do
 Push to `main` and the site updates within a minute or two.
 
 DNS for longdev-assets.com: `A` records to 185.199.108.153 / .109 / .110 / .111.153, matching `AAAA` records
-2606:50c0:8000::153 to 8003::153, and `www` as a `CNAME` to `driesderidder.github.io`.
+2606:50c0:8000::153 to 8003::153, and `www` as a `CNAME` to the GitHub Pages host of the account that owns this repo.
 
 The local Claude Code skill folders (`.agents/`, `.claude/`) are git-ignored so they are never published.

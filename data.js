@@ -7,7 +7,6 @@
 // roadmap.stage: index into stages below (0 = Planned ... 4 = Live)
 
 window.SITE = {
-  name: "Dries De Ridder",
   brand: "LongDev",
   tagline: "Unity tools for the slow, repetitive parts of the job.",
   intro:
@@ -15,9 +14,9 @@ window.SITE = {
 
   links: {
     store: "", // TODO: your Asset Store publisher page, e.g. https://assetstore.unity.com/publishers/12345
-    github: "https://github.com/DriesDeRidder",
+    github: "", // leave empty: a personal GitHub link reveals your name
     discord: "", // TODO: support Discord invite, if you want it public
-    email: "dries.deridder@hotmail.com", // support address from your store listings
+    email: "", // TODO: a LongDev address, e.g. support@longdev-assets.com (Cloudflare Email Routing)
   },
 
   about: [
@@ -86,17 +85,6 @@ window.SITE = {
         "Convert LAS, LAZ, E57, PLY and PCD scans of any size inside Unity, then stream them under a fixed memory budget. 126 million points at 154 fps.",
       facts: ["Unity 6.3+", "URP, HDRP"],
       url: "",
-    },
-    {
-      name: "Opacity Albedo Packer",
-      slug: "opacity-albedo-packer",
-      image: false, // TODO: add img/opacity-albedo-packer.jpg and remove this line
-      category: "free",
-      status: "live",
-      summary:
-        "Combines a separate opacity map and albedo map into one texture, so HDRP Lit can use the transparency. Free and open source.",
-      facts: ["HDRP", "Free on GitHub"],
-      url: "https://github.com/DriesDeRidder/Unity-HDRP-Opacity-Albedo-packer",
     },
   ],
 
