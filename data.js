@@ -39,7 +39,7 @@ window.SITE = {
       summary:
         "Bake lightmaps for every scene in one unattended run. Pre-flight checks, changed-only rebakes, webhooks when it finishes, and headless CI baking.",
       facts: ["v1.3", "Unity 6+", "Built-in, URP, HDRP"],
-      url: "", // TODO: Asset Store page
+      url: "https://assetstore.unity.com/packages/tools/utilities/batch-lightmap-baker-381494",
       detail: {
         solves: [
           "Unity bakes lighting one scene at a time. On a project with many scenes that means opening each one, checking its Lighting Settings, pressing Generate, waiting, saving, and doing it all again before every release.",
@@ -66,7 +66,7 @@ window.SITE = {
       summary:
         "Assign and swap materials in place. Arm the slots you want to change, click a material in the palette, and it lands on the whole selection.",
       facts: ["Unity 2022.3+", "Any pipeline"],
-      url: "", // TODO: Asset Store page
+      url: "https://assetstore.unity.com/packages/tools/level-design/matswap-381724",
       detail: {
         solves: [
           "Changing materials in Unity means dragging a material onto each renderer, and finding the right slot on objects that have several. Fifty objects is fifty drags.",
