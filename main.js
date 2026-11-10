@@ -56,7 +56,7 @@
 
   // Development status is a one-line link here; the full roadmap lives further down.
   const now = S.roadmap[0];
-  if (now) {
+  if (now && $("hero-status")) {
     $("hero-status").append(
       el("span", { className: "pulse" }),
       el("span", { textContent: `Now building: ${now.name}` }),
@@ -79,7 +79,9 @@
   };
 
   // Released assets first, so visitors see what they can use today; the rest sit under "Coming soon".
-  const grids = { live: $("grid-live"), soon: $("grid-soon") };
+  // A browser can pair this script with a cached older index.html (Pages caches for 10 min): fall back to its single grid.
+  const single = $("asset-grid");
+  const grids = { live: $("grid-live") || single, soon: $("grid-soon") || single };
   for (const a of S.assets) {
     const released = a.status === "live";
     const shot = el("div", { className: "shot" });
@@ -137,7 +139,10 @@
   }
   // A group with nothing in it (nothing released yet, or filtered away) disappears with its heading.
   const syncGroups = () => {
-    for (const key of ["live", "soon"]) $(`group-${key}`).hidden = ![...grids[key].children].some((c) => !c.hidden);
+    for (const key of ["live", "soon"]) {
+      const g = $(`group-${key}`);
+      if (g) g.hidden = ![...grids[key].children].some((c) => !c.hidden);
+    }
   };
   syncGroups();
 
@@ -149,7 +154,7 @@
     b.setAttribute("aria-pressed", key === "all");
     b.addEventListener("click", () => {
       for (const x of filters.children) x.setAttribute("aria-pressed", x === b);
-      for (const g of Object.values(grids)) for (const c of g.children) c.hidden = key !== "all" && c.dataset.category !== key;
+      for (const g of new Set(Object.values(grids))) for (const c of g.children) c.hidden = key !== "all" && c.dataset.category !== key;
       syncGroups();
     });
     filters.append(b);
