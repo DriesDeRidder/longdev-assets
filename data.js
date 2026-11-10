@@ -19,7 +19,7 @@ window.SITE = {
   links: {
     store: "", // TODO: your Asset Store publisher page, e.g. https://assetstore.unity.com/publishers/12345
     github: "", // leave empty: a personal GitHub link reveals your name
-    discord: "", // TODO: support Discord invite, if you want it public
+    discord: "https://discord.gg/A6Pguan2es", // support server
     email: "support@longdev-assets.com", // Cloudflare Email Routing forwards this to a private inbox
   },
 

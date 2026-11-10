@@ -138,6 +138,6 @@
   const add = (href, text) => href && fl.append(el("a", { href, textContent: text }));
   add(S.links.store, "Asset Store");
   add(S.links.github, "GitHub");
-  add(S.links.discord, "Discord");
+  add(S.links.discord, "Support on Discord");
   add(S.links.email && `mailto:${S.links.email}`, "Email for support");
 })();
