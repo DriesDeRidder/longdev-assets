@@ -102,6 +102,7 @@
       ]),
     ]);
     card.dataset.category = a.category;
+    if (a.image !== false) card.style.setProperty("--art", `url("${a.image || `img/${a.slug}.jpg`}")`);
     grid.append(card);
   }
 

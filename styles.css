@@ -240,26 +240,53 @@ a:focus-visible, button:focus-visible {
 .filters button:hover { color: var(--text); background: var(--surface); }
 .filters button[aria-pressed="true"] { color: var(--bg); background: var(--text); }
 
-/* ---------- asset grid: one table of cells with shared lines ---------- */
+/* ---------- asset grid: glass cards with room between them ---------- */
 .grid {
   list-style: none; margin: 0; padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  border-top: var(--rule);
-  border-left: var(--rule);
+  gap: clamp(20px, 2.6vw, 32px);
 }
 .asset {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex; flex-direction: column;
-  border-right: var(--rule);
-  border-bottom: var(--rule);
-  background: var(--bg);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, .10);
+  background: rgba(28, 28, 28, .55);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .09),   /* lit top edge */
+    0 18px 40px -24px rgba(0, 0, 0, .7);
 }
+/* the glass picks up colour from the card's own art, blurred behind it */
+.asset::before {
+  content: "";
+  position: absolute; inset: -25%;
+  z-index: -1;
+  background: var(--art, radial-gradient(circle at 30% 25%, rgba(255, 157, 60, .45), transparent 60%)) center / cover no-repeat;
+  filter: blur(56px) saturate(1.5);
+  opacity: .4;
+}
+.asset .status, .asset .facts li { border-radius: 5px; }
 .asset[hidden] { display: none; }
 .shot {
   aspect-ratio: 3 / 2;
   overflow: hidden;
-  border-bottom: var(--rule);
-  background: var(--surface);
+  margin: 8px 8px 0;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  background: rgba(20, 20, 20, .6);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .asset { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .asset::before { display: none; }
+}
+@media (prefers-contrast: more) {
+  .asset { border-color: var(--line); }
 }
 .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
