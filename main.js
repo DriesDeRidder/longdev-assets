@@ -178,7 +178,7 @@
   for (const p of S.about) $("about-body").append(el("p", { textContent: p }));
 
   // ---------- footer ----------
-  $("foot-text").textContent = `${S.brand}, made in Belgium.`;
+  $("foot-text").textContent = S.brand;
   const fl = $("foot-links");
   const add = (href, text) => href && fl.append(el("a", { href, textContent: text }));
   add(S.links.store, "Asset Store");
